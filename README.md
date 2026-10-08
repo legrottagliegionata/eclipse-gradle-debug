@@ -1,3 +1,5 @@
+<img src="docs/logo.svg" width="96" alt="" align="right">
+
 # Gradle Task Debugger for Eclipse
 
 Debug any Gradle task from Eclipse the way IntelliJ IDEA does it: right-click a task in the
@@ -83,7 +85,12 @@ Pages and creates a GitHub release with the zipped update site, for offline inst
 git tag v0.1.0 && git push origin v0.1.0
 ```
 
-Then move to the next version, in the POM, the manifests and the feature:
+The update site of a release is signed with PGP, so that Eclipse shows who signed it instead of
+warning about unsigned content. The release build reads the armored secret key and its passphrase
+from the repository secrets `MAVEN_GPG_KEY` and `MAVEN_GPG_PASSPHRASE`, and stops if they are
+missing.
+
+Then move to the next version, in the POMs, the manifests and the feature:
 
 ```bash
 ./mvnw tycho-versions:set-version -DnewVersion=0.2.0-SNAPSHOT

@@ -28,8 +28,21 @@ jobs:
             echo "::error::Tag $GITHUB_REF_NAME does not match the version $version"
             exit 1
           fi
+      - name: Check the signing key
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
+        run: |
+          if [ -z "$MAVEN_GPG_KEY" ]; then
+            echo "::error::A release needs the secrets MAVEN_GPG_KEY and MAVEN_GPG_PASSPHRASE to sign the update site"
+            exit 1
+          fi
       - name: Build and test
-        run: ./mvnw -B verify
+        # A release tag signs the update site with PGP.
+        run: ./mvnw -B verify ${{ startsWith(github.ref, 'refs/tags/v') && '-Psign' || '' }}
+        env:
+          MAVEN_GPG_KEY: ${{ startsWith(github.ref, 'refs/tags/v') && secrets.MAVEN_GPG_KEY || '' }}
+          MAVEN_GPG_PASSPHRASE: ${{ startsWith(github.ref, 'refs/tags/v') && secrets.MAVEN_GPG_PASSPHRASE || '' }}
       - name: Upload the test reports
         if: failure()
         uses: actions/upload-artifact@v4
