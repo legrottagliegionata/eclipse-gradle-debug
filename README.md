@@ -2,6 +2,10 @@
 
 # Gradle Task Debugger for Eclipse
 
+[![Release](https://img.shields.io/github/v/release/legrottagliegionata/eclipse-gradle-debug)](https://github.com/legrottagliegionata/eclipse-gradle-debug/releases)
+[![Build](https://github.com/legrottagliegionata/eclipse-gradle-debug/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/legrottagliegionata/eclipse-gradle-debug/actions/workflows/build.yml)
+[![License](https://img.shields.io/github/license/legrottagliegionata/eclipse-gradle-debug)](LICENSE)
+
 Debug any Gradle task from Eclipse the way IntelliJ IDEA does it: right-click a task in the
 **Gradle Tasks** view, choose **Debug Gradle Tasks**, and the debugger is attached to every JVM
 the build forks (`JavaExec`, `run`, `bootRun`, `test`, ...).
@@ -14,7 +18,13 @@ No *Remote Java Application*, no *Launch Group*, no fixed debug port.
 
 ## Install
 
-In Eclipse: *Help → Install New Software… → Add…* and use the update site
+From the [Eclipse Marketplace](https://marketplace.eclipse.org/content/gradle-task-debugger-eclipse):
+drag this button to a running Eclipse, or search for *Gradle Task Debugger* in
+*Help → Eclipse Marketplace…*
+
+[![Drag to your running Eclipse workspace. Requires Eclipse Marketplace Client](https://marketplace.eclipse.org/modules/custom/eclipsefdn/eclipsefdn_marketplace/images/btn-install.svg)](https://marketplace.eclipse.org/marketplace-client-intro?mpc_install=7570735 "Drag to your running Eclipse workspace. Requires Eclipse Marketplace Client")
+
+Or in Eclipse: *Help → Install New Software… → Add…* and use the update site
 
 ```
 https://legrottagliegionata.github.io/eclipse-gradle-debug/
