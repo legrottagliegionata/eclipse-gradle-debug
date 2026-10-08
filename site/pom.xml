@@ -15,6 +15,41 @@
     <packaging>eclipse-repository</packaging>
     <name>Gradle Task Debugger for Eclipse - Update Site</name>
 
+    <build>
+        <plugins>
+            <!-- A page for the people who open the address of the update site in a browser. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>landing-page</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/repository</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>pages</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>../docs</directory>
+                                    <includes>
+                                        <include>logo.svg</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <profiles>
         <!--
             PGP signature of the update site, used by the release build: -Psign, with the secret

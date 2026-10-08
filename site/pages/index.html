@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gradle Task Debugger for Eclipse</title>
+  <meta name="description" content="Eclipse update site of Gradle Task Debugger: debug any Gradle task from the Gradle Tasks view.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --background: #f6f7f9;
+      --surface: #ffffff;
+      --text: #1c2538;
+      --muted: #5b6475;
+      --border: #dfe3ea;
+      --accent: #1f9d5c;
+      --code: #eef1f5;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background: #121722;
+        --surface: #1a2130;
+        --text: #e8ecf3;
+        --muted: #9aa4b5;
+        --border: #2c3547;
+        --accent: #34c77b;
+        --code: #0f141d;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 48px 16px 64px; }
+    header { display: flex; gap: 20px; align-items: center; margin-bottom: 32px; }
+    header img { width: 88px; height: 88px; flex: none; }
+    h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 6px; }
+    h2 { font-size: 1.15rem; margin: 0 0 12px; }
+    p { margin: 0 0 12px; }
+    .muted { color: var(--muted); }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .url { display: flex; gap: 8px; margin: 16px 0; }
+    .url code {
+      flex: 1;
+      min-width: 0;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--code);
+      border: 1px solid var(--border);
+      font: 0.92rem/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    button {
+      flex: none;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    ol { margin: 0; padding-left: 22px; }
+    li { margin-bottom: 6px; }
+    a { color: var(--accent); }
+    footer { font-size: 0.9rem; }
+    @media (max-width: 520px) {
+      header { flex-direction: column; align-items: flex-start; }
+      .url { flex-direction: column; }
+      button { padding: 10px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="logo.svg" alt="">
+      <div>
+        <h1>Gradle Task Debugger for Eclipse</h1>
+        <p class="muted">Version ${qualifiedVersion}</p>
+      </div>
+    </header>
+
+    <section class="card">
+      <p>Debug any Gradle task from Eclipse the way IntelliJ IDEA does it: right-click a task in the
+        <strong>Gradle Tasks</strong> view and choose <strong>Debug Gradle Tasks</strong>. The debugger
+        is attached to every JVM the build forks (<code>run</code>, <code>bootRun</code>, <code>test</code>, …),
+        with hot code replace of the classes Gradle compiles.</p>
+      <p class="muted">No Remote Java Application, no Launch Group, no fixed debug port.</p>
+    </section>
+
+    <section class="card">
+      <h2>Install</h2>
+      <p>This page is an Eclipse update site. Add its address in Eclipse:</p>
+      <div class="url">
+        <code id="site">https://legrottagliegionata.github.io/eclipse-gradle-debug/</code>
+        <button type="button" id="copy">Copy</button>
+      </div>
+      <ol>
+        <li><em>Help → Install New Software… → Add…</em> and paste the address.</li>
+        <li>Select <strong>Gradle Task Debugger for Eclipse</strong>, then <em>Next</em> and <em>Finish</em>.</li>
+        <li>Restart Eclipse.</li>
+      </ol>
+      <p class="muted" style="margin-top: 12px">The update site is signed with PGP
+        (key <code>F674BC99350CB3A0</code>). Requires Eclipse 2024-06 or later with Buildship 3.1,
+        and Java 17.</p>
+    </section>
+
+    <footer class="muted">
+      <a href="https://github.com/legrottagliegionata/eclipse-gradle-debug">Source and documentation</a> ·
+      <a href="https://github.com/legrottagliegionata/eclipse-gradle-debug/releases">Releases</a> ·
+      <a href="https://github.com/legrottagliegionata/eclipse-gradle-debug/issues">Issues</a> ·
+      Eclipse Public License 2.0
+    </footer>
+  </main>
+  <script>
+    const copy = document.getElementById('copy');
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(document.getElementById('site').textContent);
+        copy.textContent = 'Copied';
+      } catch (e) {
+        copy.textContent = 'Select and copy';
+      }
+      setTimeout(() => { copy.textContent = 'Copy'; }, 2000);
+    });
+  </script>
+</body>
+</html>
