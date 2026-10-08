@@ -64,7 +64,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   # ...and attaches it, zipped, to a GitHub release, for offline installs.
   release:
