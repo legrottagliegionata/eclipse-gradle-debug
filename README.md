@@ -8,6 +8,10 @@ the build forks (`JavaExec`, `run`, `bootRun`, `test`, ...).
 
 No *Remote Java Application*, no *Launch Group*, no fixed debug port.
 
+![Debug Gradle Tasks in the context menu of the Gradle Tasks view](docs/screenshot-menu.png)
+
+![A debug session of the run task, stopped at a breakpoint in the JVM Gradle started](docs/screenshot-debug-session.png)
+
 ## Install
 
 In Eclipse: *Help → Install New Software… → Add…* and use the update site
