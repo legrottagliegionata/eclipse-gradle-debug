@@ -51,7 +51,7 @@ jobs:
           path: '**/target/surefire-reports/'
       - name: Upload the update site to GitHub Pages
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: site/target/repository
       - name: Zip the update site
