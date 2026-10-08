@@ -71,6 +71,9 @@
       font-weight: 600;
       cursor: pointer;
     }
+    .marketplace { margin: 16px 0 20px; }
+    .marketplace a { display: inline-block; padding: 6px; border-radius: 8px; background: #ffffff; }
+    .marketplace img { width: 110px; display: block; }
     ol { margin: 0; padding-left: 22px; }
     li { margin-bottom: 6px; }
     a { color: var(--accent); }
@@ -102,7 +105,17 @@
 
     <section class="card">
       <h2>Install</h2>
-      <p>This page is an Eclipse update site. Add its address in Eclipse:</p>
+      <p>From the <a href="https://marketplace.eclipse.org/content/gradle-task-debugger-eclipse">Eclipse Marketplace</a>:
+        drag this button to a running Eclipse, or search for <em>Gradle Task Debugger</em> in
+        <em>Help → Eclipse Marketplace…</em></p>
+      <p class="marketplace">
+        <a href="https://marketplace.eclipse.org/marketplace-client-intro?mpc_install=7570735"
+           title="Drag to your running Eclipse workspace. Requires Eclipse Marketplace Client">
+          <img src="https://marketplace.eclipse.org/modules/custom/eclipsefdn/eclipsefdn_marketplace/images/btn-install.svg"
+               alt="Drag to your running Eclipse workspace. Requires Eclipse Marketplace Client">
+        </a>
+      </p>
+      <p>Or use this page, which is an Eclipse update site. Add its address in Eclipse:</p>
       <div class="url">
         <code id="site">https://legrottagliegionata.github.io/eclipse-gradle-debug/</code>
         <button type="button" id="copy">Copy</button>
@@ -119,6 +132,7 @@
 
     <footer class="muted">
       <a href="https://github.com/legrottagliegionata/eclipse-gradle-debug">Source and documentation</a> ·
+      <a href="https://marketplace.eclipse.org/content/gradle-task-debugger-eclipse">Eclipse Marketplace</a> ·
       <a href="https://github.com/legrottagliegionata/eclipse-gradle-debug/releases">Releases</a> ·
       <a href="https://github.com/legrottagliegionata/eclipse-gradle-debug/issues">Issues</a> ·
       Eclipse Public License 2.0
