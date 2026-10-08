@@ -32,6 +32,11 @@ packages), Java 17 or later.
 Breakpoints are hit in every JVM the build starts. The **Gradle build** entry in the Debug view
 stops the build; terminating a JVM stops that JVM.
 
+## Try it
+
+The [demo project](demo/README.md) is a small HTTP server started by the `run` task: import it,
+put a breakpoint and choose **Debug Gradle Tasks** on `run`.
+
 ## How it works
 
 1. Eclipse starts listening for debuggee JVMs on a free port.

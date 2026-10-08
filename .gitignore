@@ -10,3 +10,10 @@ pom.tycho
 # IntelliJ IDEA
 .idea/
 *.iml
+
+# demo project: Gradle and the files Buildship writes when importing it
+.gradle/
+demo/build/
+demo/.project
+demo/.classpath
+demo/.settings/
