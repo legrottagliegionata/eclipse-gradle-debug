@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="io.github.legrottagliegionata.gradletaskdebugger.feature"
+      label="Gradle Task Debugger for Eclipse"
+      version="0.1.0.qualifier"
+      provider-name="Gionata Legrottaglie">
+
+   <description url="https://github.com/legrottagliegionata/eclipse-gradle-debug">
+Debug any Gradle task from the Gradle Tasks view, as in IntelliJ IDEA: every JVM the build forks (JavaExec, Test, ...) connects to the Eclipse debugger, with no Remote Java Application to configure.
+   </description>
+
+   <copyright>
+Copyright (c) 2026 Gionata Legrottaglie
+   </copyright>
+
+   <license url="https://www.eclipse.org/legal/epl-2.0/">
+Eclipse Public License - v 2.0
+https://www.eclipse.org/legal/epl-2.0/
+   </license>
+
+   <plugin
+         id="io.github.legrottagliegionata.gradletaskdebugger"
+         version="0.0.0"/>
+
+</feature>

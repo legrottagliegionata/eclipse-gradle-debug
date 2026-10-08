@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="io.github.legrottagliegionata.gradletaskdebugger.feature" version="0.0.0">
+      <category name="gradle-task-debugger"/>
+   </feature>
+   <category-def name="gradle-task-debugger" label="Gradle Task Debugger for Eclipse"/>
+</site>

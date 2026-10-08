@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+<!-- The oldest platform supported: Eclipse 2024-06 with Buildship 3.1. -->
+<target name="Gradle Task Debugger">
+   <locations>
+      <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+         <repository location="https://download.eclipse.org/releases/2024-06/"/>
+         <unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
+         <unit id="org.eclipse.jdt.feature.group" version="0.0.0"/>
+         <unit id="org.eclipse.buildship.feature.group" version="0.0.0"/>
+      </location>
+   </locations>
+</target>

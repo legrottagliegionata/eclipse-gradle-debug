@@ -1,0 +1,33 @@
+// Added by "Gradle Task Debugger for Eclipse" when a Gradle task is launched in debug mode.
+//
+// Every task that forks a JVM (JavaExec, Test, ...) starts it with the JDWP agent in client mode:
+// the JVM connects to the debugger Eclipse is listening on and waits for it before running.
+// The port comes from the system property 'gradleTaskDebugger.port' and is read lazily,
+// so it does not invalidate the configuration cache from one debug session to the next.
+
+gradle.allprojects { project ->
+    project.tasks.withType(JavaForkOptions).configureEach { task ->
+        if (task.hasProperty('debugOptions')) {
+            // Gradle 5.6+: set() wins over the conventions a plugin may have configured.
+            def options = task.debugOptions
+            options.enabled.set(true)
+            options.server.set(false)
+            options.suspend.set(true)
+            options.port.set(debuggerPort(project))
+            if (options.hasProperty('host')) {
+                // Gradle 7.6+
+                options.host.set('127.0.0.1')
+            }
+        } else {
+            task.jvmArgs("-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=127.0.0.1:${System.getProperty('gradleTaskDebugger.port')}")
+        }
+    }
+}
+
+def debuggerPort(project) {
+    if (project.providers.metaClass.respondsTo(project.providers, 'systemProperty', String)) {
+        // Gradle 6.1+
+        return project.providers.systemProperty('gradleTaskDebugger.port').map { it as Integer }
+    }
+    return project.providers.provider { System.getProperty('gradleTaskDebugger.port') as Integer }
+}

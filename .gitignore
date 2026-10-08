@@ -1,0 +1,12 @@
+target/
+bin/
+.metadata/
+.DS_Store
+
+# files Tycho's pomless build leaves behind when interrupted (e.g. by an IDE import)
+.polyglot.*
+pom.tycho
+
+# IntelliJ IDEA
+.idea/
+*.iml

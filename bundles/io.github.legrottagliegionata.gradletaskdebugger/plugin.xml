@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <!-- "debug" mode for Buildship's Gradle Task run configurations -->
+   <extension point="org.eclipse.debug.core.launchDelegates">
+      <launchDelegate
+            id="io.github.legrottagliegionata.gradletaskdebugger.launchDelegate"
+            name="Gradle Task Debugger"
+            delegate="io.github.legrottagliegionata.gradletaskdebugger.GradleTaskDebugLaunchDelegate"
+            delegateDescription="Runs the Gradle tasks and attaches the debugger to every JVM the build forks (JavaExec, Test, ...)."
+            modes="debug"
+            type="org.eclipse.buildship.core.launch.runconfiguration">
+      </launchDelegate>
+   </extension>
+
+   <!-- debug arguments (init script and port) for the build of a debug launch -->
+   <extension point="org.eclipse.buildship.core.invocationcustomizers">
+      <customizer class="io.github.legrottagliegionata.gradletaskdebugger.DebugInvocationCustomizer"/>
+   </extension>
+
+   <!-- "Debug Gradle Tasks" in the Gradle Tasks view -->
+   <extension point="org.eclipse.ui.commands">
+      <command
+            id="io.github.legrottagliegionata.gradletaskdebugger.commands.debugTasks"
+            categoryId="org.eclipse.debug.ui.category.run"
+            name="Debug Gradle Tasks"
+            description="Runs the selected Gradle tasks with the debugger attached to the JVMs they start">
+      </command>
+   </extension>
+
+   <extension point="org.eclipse.ui.handlers">
+      <handler
+            commandId="io.github.legrottagliegionata.gradletaskdebugger.commands.debugTasks"
+            class="io.github.legrottagliegionata.gradletaskdebugger.DebugTasksHandler">
+         <enabledWhen>
+            <with variable="selection">
+               <iterate operator="and" ifEmpty="false">
+                  <instanceof value="org.eclipse.buildship.ui.internal.view.task.TaskNode"/>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+   </extension>
+
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution locationURI="popup:org.eclipse.buildship.ui.views.taskview?after=additions">
+         <command
+               commandId="io.github.legrottagliegionata.gradletaskdebugger.commands.debugTasks"
+               icon="platform:/plugin/org.eclipse.debug.ui/icons/full/etool16/debug_exc.png"
+               style="push">
+            <visibleWhen checkEnabled="true"/>
+         </command>
+      </menuContribution>
+   </extension>
+
+</plugin>
