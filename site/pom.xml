@@ -17,8 +17,8 @@
 
     <profiles>
         <!--
-            PGP signature of the update site, used by the release build: -Psign with the armored
-            secret key in MAVEN_GPG_KEY and its passphrase in MAVEN_GPG_PASSPHRASE.
+            PGP signature of the update site, used by the release build: -Psign, with the secret
+            key imported in the gpg keyring and its passphrase in MAVEN_GPG_PASSPHRASE.
         -->
         <profile>
             <id>sign</id>
@@ -35,7 +35,6 @@
                                     <goal>sign-p2-artifacts</goal>
                                 </goals>
                                 <configuration>
-                                    <signer>bc</signer>
                                     <useAgent>false</useAgent>
                                 </configuration>
                             </execution>
