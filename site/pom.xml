@@ -40,6 +40,7 @@
                                     <directory>../docs</directory>
                                     <includes>
                                         <include>logo.svg</include>
+                                        <include>screenshot-*.png</include>
                                     </includes>
                                 </resource>
                             </resources>

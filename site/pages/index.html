@@ -71,6 +71,16 @@
       font-weight: 600;
       cursor: pointer;
     }
+    .screenshots { display: grid; gap: 24px; }
+    figure { margin: 0; }
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    figcaption { margin-top: 8px; font-size: 0.92rem; color: var(--muted); }
     .marketplace { margin: 16px 0 20px; }
     .marketplace a { display: inline-block; padding: 6px; border-radius: 8px; background: #ffffff; }
     .marketplace img { width: 110px; display: block; }
@@ -128,6 +138,20 @@
       <p class="muted" style="margin-top: 12px">The update site is signed with PGP
         (key <code>F674BC99350CB3A0</code>). Requires Eclipse 2024-06 or later with Buildship 3.1,
         and Java 17.</p>
+    </section>
+
+    <section class="card screenshots">
+      <figure>
+        <a href="screenshot-menu.png"><img src="screenshot-menu.png" width="1156" height="1140"
+          alt="Debug Gradle Tasks in the context menu of the Gradle Tasks view"></a>
+        <figcaption>Right-click a task in the Gradle Tasks view and choose <strong>Debug Gradle Tasks</strong>.</figcaption>
+      </figure>
+      <figure>
+        <a href="screenshot-debug-session.png"><img src="screenshot-debug-session.png" width="2000" height="1046"
+          alt="A debug session of the run task, stopped at a breakpoint in the JVM Gradle started"></a>
+        <figcaption>The JVM started by the <code>run</code> task stops at a breakpoint; the
+          <strong>Gradle build</strong> entry stops the build.</figcaption>
+      </figure>
     </section>
 
     <footer class="muted">
