@@ -14,6 +14,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CopyOnWriteArrayList;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceDescription;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.jdt.debug.core.IJavaDebugTarget;
+import org.eclipse.jdt.debug.core.IJavaHotCodeReplaceListener;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
@@ -98,6 +107,11 @@ class GradleTaskDebugLaunchDelegateTest {
         main, "demo.Main", BREAKPOINT_LINE, -1, -1, 0, true, new HashMap<>());
     configuration =
         GradleRunConfigurations.getOrCreate(new TaskSelection(sample.toFile(), List.of(":run")));
+    IWorkspaceDescription description = ResourcesPlugin.getWorkspace().getDescription();
+    description.setAutoBuilding(true);
+    ResourcesPlugin.getWorkspace().setDescription(description);
+    ResourcesPlugin.getWorkspace()
+        .build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
   }
 
   @BeforeEach
@@ -143,6 +157,59 @@ class GradleTaskDebugLaunchDelegateTest {
       Thread.sleep(100);
     }
     assertTrue(thread.getDebugTarget().isTerminated(), "The JVM must stop with the build");
+  }
+
+  @Test
+  void replacesClassesSavedDuringTheDebugSession() throws Exception {
+    BlockingQueue<IJavaDebugTarget> replaced = new LinkedBlockingQueue<>();
+    List<String> failures = new CopyOnWriteArrayList<>();
+    IJavaHotCodeReplaceListener hotCodeReplace =
+        new IJavaHotCodeReplaceListener() {
+          @Override
+          public void hotCodeReplaceSucceeded(IJavaDebugTarget target) {
+            replaced.add(target);
+          }
+
+          @Override
+          public void hotCodeReplaceFailed(IJavaDebugTarget target, DebugException exception) {
+            failures.add(String.valueOf(exception));
+          }
+
+          @Override
+          public void obsoleteMethods(IJavaDebugTarget target) {}
+        };
+    IFile greeting =
+        ResourcesPlugin.getWorkspace()
+            .getRoot()
+            .getProject("sample")
+            .getFile("src/main/java/demo/Greeting.java");
+    String original = new String(greeting.getContents().readAllBytes(), StandardCharsets.UTF_8);
+    JDIDebugModel.addHotCodeReplaceListener(hotCodeReplace);
+    try {
+      CompletableFuture<ILaunch> launch =
+          CompletableFuture.supplyAsync(() -> launchInDebugMode(configuration));
+      IJavaThread thread = awaitBreakpoint();
+
+      save(greeting, original.replace("Hello from", "Reloaded in"));
+      IJavaDebugTarget target = replaced.poll(1, TimeUnit.MINUTES);
+      assertEquals(
+          thread.getDebugTarget(), target, "The saved class was not replaced: " + failures);
+      assertEquals(List.of(), failures, "No replacement may fail, e.g. with classes ECJ compiled");
+      thread.resume();
+
+      assertEnded(launch.get(5, TimeUnit.MINUTES));
+    } finally {
+      JDIDebugModel.removeHotCodeReplaceListener(hotCodeReplace);
+      save(greeting, original);
+    }
+  }
+
+  /** Saves as the editor does: the class is compiled by the workspace auto-build. */
+  private static void save(IFile file, String content) throws CoreException {
+    file.setContents(
+        new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
+        IResource.FORCE,
+        new NullProgressMonitor());
   }
 
   private IJavaThread awaitBreakpoint() throws InterruptedException {

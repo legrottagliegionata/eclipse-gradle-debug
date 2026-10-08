@@ -37,10 +37,12 @@ final class DebugSession implements AutoCloseable {
 
   private final ILaunch launch;
   private final GradleBuildProcess build;
+  private final GradleReload reload;
 
   private DebugSession(ILaunch launch, GradleBuildProcess build) {
     this.launch = launch;
     this.build = build;
+    this.reload = GradleReload.start(launch);
   }
 
   static DebugSession start(
@@ -85,6 +87,7 @@ final class DebugSession implements AutoCloseable {
   /** Stops the JDT listeners, the other processes of the launch, and ends the build process. */
   @Override
   public void close() {
+    reload.stop();
     DebugInvocationCustomizer.disarm(launch);
     for (IProcess process : launch.getProcesses()) {
       try {

@@ -45,6 +45,13 @@ Details:
   reused from one debug session to the next.
 - The first debug launch of a configuration adds the standard JDT attribute
   `org.eclipse.jdt.launching.ALLOW_TERMINATE`, so that Terminate can stop the JVMs.
+- Hot code replace uses the classes compiled by Gradle. The JVMs run what javac compiled, and
+  Eclipse's compiler (ECJ) names lambdas and other synthetic members differently, so the JVM would
+  reject its classes as methods removed and added. When a Java file is saved during a debug
+  session, the plugin runs the `classes` task of its project and hands the class files Gradle
+  rewrote to JDT's hot code replace, which redefines them and reinstalls the breakpoints. It takes
+  as long as that Gradle compilation, and only runs when *Build Automatically* is on. Changes no
+  JVM can redefine, such as new methods or fields, are reported by JDT as usual.
 - Only JVMs forked by the build are debugged. To debug build logic (plugins, `buildSrc`), which
   runs in the Gradle daemon, use `-Dorg.gradle.debug=true`.
 - Buildship does not export the model of the Gradle Tasks view: the plugin reads the selected

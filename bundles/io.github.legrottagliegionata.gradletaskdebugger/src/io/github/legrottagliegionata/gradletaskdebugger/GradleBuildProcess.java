@@ -18,6 +18,7 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamsProxy;
 
@@ -88,11 +89,19 @@ final class GradleBuildProcess extends PlatformObject implements IProcess {
     return terminated;
   }
 
-  /** Asks Buildship to cancel the build: the process ends when the build does. */
+  /**
+   * Asks Buildship to cancel the build, and stops the JVMs of the build: a JVM suspended by the
+   * debugger may not handle the signal Gradle sends it. The process ends when the build does.
+   */
   @Override
-  public void terminate() {
+  public void terminate() throws DebugException {
     terminateRequested = true;
     fire(DebugEvent.CHANGE);
+    for (IDebugTarget jvm : launch.getDebugTargets()) {
+      if (jvm.canTerminate()) {
+        jvm.terminate();
+      }
+    }
   }
 
   boolean isTerminateRequested() {
