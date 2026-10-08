@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Gradle Task Debugger for Eclipse Tests
 Bundle-SymbolicName: io.github.legrottagliegionata.gradletaskdebugger.tests
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: Gionata Legrottaglie
 Fragment-Host: io.github.legrottagliegionata.gradletaskdebugger
 Bundle-RequiredExecutionEnvironment: JavaSE-17
