@@ -20,15 +20,38 @@ jobs:
           distribution: temurin
           java-version: 21
           cache: maven
+      - name: Check that the tag matches the version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          version=$(./mvnw -q help:evaluate -Dexpression=project.version -DforceStdout)
+          if [ "v${version%-SNAPSHOT}" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match the version $version"
+            exit 1
+          fi
       - name: Build and test
         run: ./mvnw -B verify
-      - name: Upload the update site
+      - name: Upload the test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: '**/target/surefire-reports/'
+      - name: Upload the update site to GitHub Pages
         if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-pages-artifact@v3
         with:
           path: site/target/repository
+      - name: Zip the update site
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: cd site/target/repository && zip -r "$GITHUB_WORKSPACE/gradle-task-debugger-${GITHUB_REF_NAME#v}.zip" .
+      - name: Upload the zipped update site
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v4
+        with:
+          name: update-site
+          path: gradle-task-debugger-*.zip
 
-  # A release tag publishes the p2 update site on GitHub Pages.
+  # A release tag publishes the p2 update site on GitHub Pages...
   publish:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: build
@@ -42,3 +65,21 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # ...and attaches it, zipped, to a GitHub release, for offline installs.
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: update-site
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME" gradle-task-debugger-*.zip
+          --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME" --generate-notes

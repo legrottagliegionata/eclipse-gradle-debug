@@ -14,6 +14,10 @@ In Eclipse: *Help → Install New Software… → Add…* and use the update sit
 https://legrottagliegionata.github.io/eclipse-gradle-debug/
 ```
 
+Offline, download the zipped update site from the
+[releases](https://github.com/legrottagliegionata/eclipse-gradle-debug/releases) and choose
+*Add… → Archive…*.
+
 Requirements: Eclipse 2024-06 or later, Buildship 3.1 or later (included in the Eclipse IDE
 packages), Java 17 or later.
 
@@ -68,6 +72,22 @@ The integration test imports a Gradle project, launches its `run` task in debug 
 that a breakpoint is hit. Run it with Java 21 to 24: Buildship 3.1.10, in the 2024-06 target
 platform, cannot import projects on Java 25. The update site is written to
 `site/target/repository`.
+
+## Release
+
+Every push is built and tested by [GitHub Actions](.github/workflows/build.yml). A tag `v<version>`,
+matching the version of the build without `-SNAPSHOT`, also publishes the update site on GitHub
+Pages and creates a GitHub release with the zipped update site, for offline installs:
+
+```bash
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+Then move to the next version, in the POM, the manifests and the feature:
+
+```bash
+./mvnw tycho-versions:set-version -DnewVersion=0.2.0-SNAPSHOT
+```
 
 ## License
 
