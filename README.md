@@ -53,6 +53,9 @@ put a breakpoint and choose **Debug Gradle Tasks** on `run`.
 
 ## How it works
 
+The story behind the plugin, and the two Eclipse quirks it works around, is told in
+[Debugging Gradle tasks in Eclipse, the way IntelliJ does it](https://dev.to/gionata_legrottaglie/debugging-gradle-tasks-in-eclipse-the-way-intellij-does-it-1a82).
+
 1. Eclipse starts listening for debuggee JVMs on a free port.
 2. Buildship runs the build exactly as in run mode, plus an
    [init script](bundles/io.github.legrottagliegionata.gradletaskdebugger/scripts/gradle-task-debugger.init.gradle)
@@ -108,6 +111,10 @@ The update site of a release is signed with PGP, so that Eclipse shows who signe
 warning about unsigned content. The release build reads the armored secret key and its passphrase
 from the repository secrets `MAVEN_GPG_KEY` and `MAVEN_GPG_PASSPHRASE`, and stops if they are
 missing.
+
+The [Eclipse Marketplace listing](https://marketplace.eclipse.org/content/gradle-task-debugger-eclipse)
+installs from the update site, so it always gets the latest release, but the version it shows does
+not follow the tags: update it by hand in *My Marketplace → Edit*.
 
 Then move to the next version, in the POMs, the manifests and the feature:
 
