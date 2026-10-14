@@ -120,7 +120,7 @@ not follow the tags: update it by hand in *My Marketplace → Edit*.
 Then move to the next version, in the POMs, the manifests and the feature:
 
 ```bash
-./mvnw tycho-versions:set-version -DnewVersion=0.2.0-SNAPSHOT
+./mvnw org.eclipse.tycho:tycho-versions-plugin:5.0.4:set-version -DnewVersion=1.6.0-SNAPSHOT
 ```
 
 ## License
