@@ -4,4 +4,11 @@
       <category name="gradle-task-debugger"/>
    </feature>
    <category-def name="gradle-task-debugger" label="Gradle Task Debugger for Eclipse"/>
+   <!--
+      Eclipse installations without Buildship install it together with the plugin, instead of
+      failing because org.eclipse.buildship.core cannot be found. Buildship's update site does not
+      contain all its dependencies (Guava's failureaccess): p2 takes them from the Eclipse release.
+   -->
+   <repository-reference location="https://download.eclipse.org/buildship/updates/latest/" enabled="true"/>
+   <repository-reference location="https://download.eclipse.org/releases/latest/" enabled="true"/>
 </site>

@@ -34,8 +34,9 @@ Offline, download the zipped update site from the
 [releases](https://github.com/legrottagliegionata/eclipse-gradle-debug/releases) and choose
 *Add… → Archive…*.
 
-Requirements: Eclipse 2024-06 or later, Buildship 3.1 or later (included in the Eclipse IDE
-packages), Java 17 or later.
+Requirements: Eclipse 2024-06 or later, Buildship 3.1 or later, Java 17 or later.
+Buildship is included in the Eclipse IDE packages; where it is missing, the update site refers to
+the Buildship and Eclipse release update sites, so that it is installed together with the plugin.
 
 ## Use
 
