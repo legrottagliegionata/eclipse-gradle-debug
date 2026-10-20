@@ -33,7 +33,7 @@ final class GradleRunConfigurations {
 
   // Attributes Buildship stores in its .launch files.
   private static final String TASKS = "tasks";
-  private static final String WORKING_DIR = "working_dir";
+  static final String WORKING_DIR = "working_dir";
 
   private GradleRunConfigurations() {}
 

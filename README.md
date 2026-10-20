@@ -81,6 +81,10 @@ Details:
   rewrote to JDT's hot code replace, which redefines them and reinstalls the breakpoints. It takes
   as long as that Gradle compilation, and only runs when *Build Automatically* is on. Changes no
   JVM can redefine, such as new methods or fields, are reported by JDT as usual.
+- Sources are looked up in the projects of the build first, then in the other projects of the
+  workspace, then in the libraries and JDKs of their classpath. The sources of a library are the
+  ones Buildship attaches when it synchronizes the project, from the `-sources` artifacts of the
+  repositories: if a dependency shows no source, run *Gradle → Refresh Gradle Project*.
 - Only JVMs forked by the build are debugged. To debug build logic (plugins, `buildSrc`), which
   runs in the Gradle daemon, use `-Dorg.gradle.debug=true`.
 - Buildship does not export the model of the Gradle Tasks view: the plugin reads the selected

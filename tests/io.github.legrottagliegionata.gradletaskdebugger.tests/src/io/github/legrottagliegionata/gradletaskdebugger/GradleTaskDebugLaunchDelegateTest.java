@@ -10,6 +10,7 @@
 package io.github.legrottagliegionata.gradletaskdebugger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -51,6 +52,10 @@ import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.sourcelookup.ISourceLookupDirector;
+import org.eclipse.jdt.core.IClassFile;
+import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.JDIDebugModel;
 import org.junit.jupiter.api.AfterEach;
@@ -68,7 +73,9 @@ import org.osgi.framework.FrameworkUtil;
 class GradleTaskDebugLaunchDelegateTest {
 
   private static final String GRADLE_VERSION = System.getProperty("gradleVersion", "9.8.0");
-  private static final int BREAKPOINT_LINE = 6;
+  private static final int BREAKPOINT_LINE = 8;
+  /** In {@code library.Shouter}, a class of a library in the sample's Maven repository. */
+  private static final int LIBRARY_LINE = 6;
 
   @TempDir static Path dir;
   private static ILaunchConfiguration configuration;
@@ -201,6 +208,66 @@ class GradleTaskDebugLaunchDelegateTest {
     } finally {
       JDIDebugModel.removeHotCodeReplaceListener(hotCodeReplace);
       save(greeting, original);
+    }
+  }
+
+  /**
+   * Stops in the project, then in a class of a library, as stepping into one of its methods does,
+   * and asks the launch for the source of each frame, as the Debug view does: the file in the
+   * workspace for the project, the class file with the sources Buildship attached from the
+   * library's -sources.jar for the library. The classes of the JDK are found too, with their
+   * sources when the JDK has a src.zip.
+   */
+  @Test
+  void findsTheSourcesOfTheProjectAndOfItsLibraries() throws Exception {
+    // A class without a resource, as the breakpoints set in the class file editor.
+    IJavaLineBreakpoint inLibrary =
+        JDIDebugModel.createLineBreakpoint(
+            ResourcesPlugin.getWorkspace().getRoot(),
+            "library.Shouter",
+            LIBRARY_LINE,
+            -1,
+            -1,
+            0,
+            true,
+            new HashMap<>());
+    try {
+      CompletableFuture<ILaunch> launch =
+          CompletableFuture.supplyAsync(() -> launchInDebugMode(configuration));
+      IJavaThread inMain = awaitBreakpoint();
+      Object project =
+          ((ISourceLookupDirector) inMain.getLaunch().getSourceLocator())
+              .getSourceElement(inMain.getTopStackFrame());
+      inMain.resume();
+
+      IJavaThread thread = awaitBreakpoint();
+      IJavaStackFrame frame = (IJavaStackFrame) thread.getTopStackFrame();
+      String type = frame.getDeclaringTypeName();
+      ISourceLookupDirector sources =
+          (ISourceLookupDirector) thread.getLaunch().getSourceLocator();
+      Object library = sources.getSourceElement(frame);
+      // Out of java.base: every module of the JDK is a root of its own.
+      Object jdk = sources.getSourceElement("java/util/logging/Logger.java");
+      // The build ends before asserting, so that a failure does not leave it to the next test.
+      thread.resume();
+      ILaunch ended = launch.get(5, TimeUnit.MINUTES);
+
+      assertEquals(
+          ResourcesPlugin.getWorkspace()
+              .getRoot()
+              .getProject("sample")
+              .getFile("src/main/java/demo/Main.java"),
+          project,
+          "The frames of the project must have its sources in the workspace, before the libraries");
+      assertEquals("library.Shouter", type);
+      assertTrue(
+          library instanceof IClassFile classFile && classFile.getSource() != null,
+          "The frame of the library must have the sources of its -sources.jar, not " + library);
+      assertInstanceOf(
+          IClassFile.class, jdk, "The classes of the JDK must be found in the JRE of the projects");
+      assertEnded(ended);
+    } finally {
+      inLibrary.delete();
     }
   }
 

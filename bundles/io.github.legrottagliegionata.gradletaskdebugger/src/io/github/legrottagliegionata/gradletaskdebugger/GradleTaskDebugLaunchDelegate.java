@@ -33,7 +33,7 @@ public final class GradleTaskDebugLaunchDelegate implements ILaunchConfiguration
 
   @Override
   public ILaunch getLaunch(ILaunchConfiguration configuration, String mode) {
-    return new Launch(configuration, mode, SourceLookup.newDirector());
+    return new Launch(configuration, mode, SourceLookup.newDirector(configuration));
   }
 
   @Override

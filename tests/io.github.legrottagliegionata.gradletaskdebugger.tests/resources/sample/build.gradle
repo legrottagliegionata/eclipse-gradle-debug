@@ -2,6 +2,19 @@ plugins {
     id 'application'
 }
 
+repositories {
+    // A library published with its -sources.jar, so that no network is needed. Its jars are built
+    // from the Shouter.java of the -sources.jar, in repository/sample/library/1.0:
+    //   javac --release 17 -d classes library/Shouter.java
+    //   jar --create --no-manifest --file library-1.0.jar -C classes .
+    //   jar --create --no-manifest --file library-1.0-sources.jar library/Shouter.java
+    maven { url = uri('repository') }
+}
+
+dependencies {
+    implementation 'sample:library:1.0'
+}
+
 application {
     mainClass = 'demo.Main'
 }
