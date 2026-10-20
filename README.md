@@ -30,13 +30,19 @@ Or in Eclipse: *Help → Install New Software… → Add…* and use the update 
 https://legrottagliegionata.github.io/eclipse-gradle-debug/
 ```
 
+In that wizard, uncheck *Contact all update sites during install to find required software*. The
+plugin needs nothing that your Eclipse does not have already, and with that option p2 also replaces
+shared libraries of the IDE with the ones of the latest Eclipse release, which can leave it unable
+to start. The Marketplace does not have this problem when Buildship is installed: it installs from the
+plugin's update site only.
+
 Offline, download the zipped update site from the
 [releases](https://github.com/legrottagliegionata/eclipse-gradle-debug/releases) and choose
 *Add… → Archive…*.
 
-Requirements: Eclipse 2024-06 or later, Buildship 3.1 or later, Java 17 or later.
-Buildship is included in the Eclipse IDE packages; where it is missing, the update site refers to
-the Buildship and Eclipse release update sites, so that it is installed together with the plugin.
+Requirements: Eclipse 2024-06 or later, Buildship 3.1 or later, Java 17 or later. Buildship is
+included in the Eclipse IDE for Java and for Enterprise Java packages; elsewhere, install it first
+from the Marketplace or from the update site of your Eclipse release.
 
 ## Use
 

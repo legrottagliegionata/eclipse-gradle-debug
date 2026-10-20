@@ -132,12 +132,16 @@
       </div>
       <ol>
         <li><em>Help → Install New Software… → Add…</em> and paste the address.</li>
-        <li>Select <strong>Gradle Task Debugger for Eclipse</strong>, then <em>Next</em> and <em>Finish</em>.</li>
+        <li>Select <strong>Gradle Task Debugger for Eclipse</strong> and uncheck <em>Contact all update
+          sites during install to find required software</em>: otherwise p2 also replaces shared
+          libraries of the IDE with the ones of the latest Eclipse release, which can leave it unable
+          to start.</li>
+        <li><em>Next</em> and <em>Finish</em>.</li>
         <li>Restart Eclipse.</li>
       </ol>
       <p class="muted" style="margin-top: 12px">The update site is signed with PGP
-        (key <code>F674BC99350CB3A0</code>). Requires Eclipse 2024-06 or later and Java 17; Buildship 3.1,
-        if missing, is installed together with the plugin.</p>
+        (key <code>F674BC99350CB3A0</code>). Requires Eclipse 2024-06 or later with Buildship 3.1, and Java 17.
+        Buildship is included in the Eclipse IDE for Java and for Enterprise Java packages.</p>
     </section>
 
     <section class="card screenshots">
